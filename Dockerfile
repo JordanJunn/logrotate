@@ -14,7 +14,7 @@ ENV CRON_SCHEDULE='0 * * * *' \
 	LOGROTATE_PATTERN='/logs/*.log' \
 	LOGROTATE_ROTATE='0'
 
-RUN apt-get install -y logrotate gettext-base \
+RUN apt-get install -y logrotate \
     && mkdir -p /logs \
     && mkdir -p /etc/logrotate.d
 
