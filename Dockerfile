@@ -1,4 +1,13 @@
-FROM alpine:3.7
+FROM ubuntu:20.04 
+
+RUN apt-get update
+RUN apt-get install -y \
+	unzip \
+    curl \
+    && curl https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -o "awscli-v2.zip" \
+	&& unzip awscli-v2.zip \
+	&& ./aws/install
+    
 
 ENV CRON_SCHEDULE='0 * * * *' \
     LOGROTATE_SIZE='100M' \
@@ -6,7 +15,7 @@ ENV CRON_SCHEDULE='0 * * * *' \
     LOGROTATE_PATTERN='/logs/*.log' \
     LOGROTATE_ROTATE='0'
 
-RUN apk --no-cache add logrotate tini gettext libintl \
+RUN apt-get install -y logrotate gettext-base \
     && mkdir -p /logs \
     && mkdir -p /etc/logrotate.d
 
@@ -15,4 +24,3 @@ COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 
-CMD ["/usr/sbin/crond", "-f", "-L", "/dev/stdout"]
